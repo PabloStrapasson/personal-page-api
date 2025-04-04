@@ -19,6 +19,9 @@ export class Project {
 
   @Prop()
   deploy_url: string;
+
+  @Prop()
+  image_name: string;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

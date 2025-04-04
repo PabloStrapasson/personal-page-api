@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Project } from './schemas/project.schema';
+import { Project, ProjectDocument } from './schemas/project.schema';
 import { Model } from 'mongoose';
 
 @Injectable()
 export class ProjectService {
   constructor(
-    @InjectModel(Project.name) private projectModel: Model<Project>,
+    @InjectModel(Project.name)
+    private projectModel: Model<ProjectDocument>,
   ) {}
 
   async findAll() {
@@ -15,6 +16,7 @@ export class ProjectService {
       return projects;
     } catch (e) {
       console.error(e);
+      throw new Error('Error fetching projects');
     }
   }
 }
