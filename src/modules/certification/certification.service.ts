@@ -5,6 +5,7 @@ import {
   Certification,
   CertificationDocument,
 } from './schemas/certification.schema';
+import { CreateCertificationDto } from './dto/create-certification.dto';
 
 @Injectable()
 export class CertificationService {
@@ -20,6 +21,32 @@ export class CertificationService {
     } catch (e) {
       console.error(e);
       throw new Error('Error fetching certifications');
+    }
+  }
+
+  async createCertification(certification: CreateCertificationDto) {
+    try {
+      const newCertification = new this.certificationModel(certification);
+      return await newCertification.save();
+    } catch (e) {
+      console.error(e);
+      throw new Error('Error creating certification');
+    }
+  }
+
+  async deleteCertification(id: string) {
+    try {
+      const deletedCertification = await this.certificationModel
+        .findByIdAndDelete(id)
+        .exec();
+      if (!deletedCertification) {
+        throw new Error('Certification not found');
+      }
+
+      return deletedCertification;
+    } catch (e) {
+      console.error(e);
+      throw new Error('Error deleting certification');
     }
   }
 }
