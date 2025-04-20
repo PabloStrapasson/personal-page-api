@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Project, ProjectDocument } from './schemas/project.schema';
 import { Model } from 'mongoose';
@@ -28,6 +28,23 @@ export class ProjectService {
     } catch (e) {
       console.error(e);
       throw new Error('Error creating project');
+    }
+  }
+
+  async updateProject(name: string, project: Partial<CreateProjectDto>) {
+    try {
+      const updatedProject = await this.projectModel
+        .findOneAndUpdate({ name }, project)
+        .exec();
+
+      if (!updatedProject) {
+        throw new NotFoundException('Project not found');
+      }
+
+      return updatedProject;
+    } catch (e) {
+      console.error(e);
+      throw new Error('Error updating project');
     }
   }
 
