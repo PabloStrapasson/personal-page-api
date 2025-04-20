@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
@@ -39,6 +40,26 @@ export class ProjectController {
       return {
         message: 'Project created successfully',
         project: newProject,
+      };
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  @Patch('/update')
+  async updateProject(
+    @Body('name') name: string,
+    @Body('project') project: Partial<CreateProjectDto>,
+  ): Promise<ProjectResponse> {
+    try {
+      const updatedProject = await this.projectService.updateProject(
+        name,
+        project,
+      );
+
+      return {
+        message: 'Project updated successfully',
+        project: updatedProject,
       };
     } catch (error) {
       throw new Error(error.message);

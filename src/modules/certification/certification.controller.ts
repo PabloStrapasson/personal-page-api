@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { CertificationService } from './certification.service';
@@ -39,6 +40,27 @@ export class CertificationController {
       return {
         message: 'Certification created successfully',
         certification: newCertification,
+      };
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  @Patch('/update')
+  async updateCertification(
+    @Body('name') name: string,
+    @Body('certification') certification: Partial<CreateCertificationDto>,
+  ): Promise<CertificationResponse> {
+    try {
+      const updatedCertification =
+        await this.certificationService.updateCertification(
+          name,
+          certification,
+        );
+
+      return {
+        message: 'Certification updated successfully',
+        certification: updatedCertification,
       };
     } catch (error) {
       throw new Error(error.message);

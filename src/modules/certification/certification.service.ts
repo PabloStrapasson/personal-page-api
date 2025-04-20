@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -31,6 +31,26 @@ export class CertificationService {
     } catch (e) {
       console.error(e);
       throw new Error('Error creating certification');
+    }
+  }
+
+  async updateCertification(
+    name: string,
+    certification: Partial<CreateCertificationDto>,
+  ) {
+    try {
+      const updatedCertification = await this.certificationModel
+        .findOneAndUpdate({ name }, certification)
+        .exec();
+
+      if (!updatedCertification) {
+        throw new NotFoundException('Certification not found');
+      }
+
+      return updatedCertification;
+    } catch (e) {
+      console.error(e);
+      throw new Error('Error updating certification');
     }
   }
 
